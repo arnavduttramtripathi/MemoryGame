@@ -7,14 +7,19 @@ const MemoryGame = () => {
     const [solved, setSolved] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [won, setWon] = useState(false);
-    const [moves, setMoves] = useState(0); // Track current moves
-    const [maxMoves, setMaxMoves] = useState(20); // Track max moves allowed
+    const [moves, setMoves] = useState(0); 
+    const [maxMoves, setMaxMoves] = useState(20); 
 
     const handleGridSizeChange = (e) => {
-        const size = parseInt(e.target.value);
-        if (size >= 2 && size <= 10) setGridSize(size);
-    };
+    const value = e.target.value;
+    const size = parseInt(value, 10);
 
+    if (!isNaN(size) && size >= 2 && size <= 10 && size % 2 === 0) {
+        setGridSize(size);
+    } else {
+        console.warn('Please select an even number between 2 and 10.');
+    }
+};
     const handleMaxMovesChange = (e) => {
         const moves = parseInt(e.target.value);
         if (moves > 0) setMaxMoves(moves);
@@ -23,12 +28,11 @@ const MemoryGame = () => {
     const checkMatch = (secondId) => {
         const [firstId] = flipper;
         if (cards[firstId].number === cards[secondId].number) {
-            // Correct match, don't increment moves
             setSolved([...solved, firstId, secondId]);
             setFlipper([]);
             setDisabled(false);
         } else {
-            // Incorrect match, increment moves
+          
             setMoves(moves + 1);
             setTimeout(() => {
                 setFlipper([]);
@@ -50,7 +54,7 @@ const MemoryGame = () => {
         setFlipper([]);
         setSolved([]);
         setWon(false);
-        setMoves(0); // Reset moves on a new game
+        setMoves(0);
     };
 
     useEffect(() => {
